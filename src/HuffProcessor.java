@@ -187,13 +187,14 @@ public class HuffProcessor {
 
 	private HuffNode readTree(BitInputStream in) {
 		int bit = in.readBits(1);
-		if (bit == -1) throw new HuffException("bit read fail");
+		if (bit == -1) {
+			throw new HuffException("bit read fail");
+		}
 		if (bit == 0) {
 			HuffNode left = readTree(in);
 			HuffNode right = readTree(in);
 			return new HuffNode(0,0,left,right);
-		}
-		else {
+		} else {
 			int value = in.readBits(BITS_PER_WORD + 1 );
 			return new HuffNode(value,0,null,null);
 			}
