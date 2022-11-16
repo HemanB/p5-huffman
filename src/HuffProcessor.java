@@ -72,6 +72,19 @@ public class HuffProcessor {
 		String[] encodings = new String[ALPH_SIZE + 1];
 		makeEncodings(root, "", encodings);
 
+		while (true) {
+			int bits = in.readBits(BITS_PER_WORD);
+			if (bits == -1) {
+				break;
+			} else {
+				char x = (char) bits;
+				String y = encodings[x];
+				out.writeBits(y.length(), Integer.parseInt(y, 2));
+			}
+		}
+
+		String y = encodings[PSEUDO_EOF];
+		out.writeBits(y.length(), Integer.parseInt(y, 2));
 		out.close();
 	}
 
@@ -91,7 +104,7 @@ public class HuffProcessor {
 			encoding[root.value] = currentPath;
 		} else {
 			makeEncodings(root.left, currentPath + "0", encoding);
-			makeEncodings(root.right, currentPath + "0", encoding);
+			makeEncodings(root.right, currentPath + "1", encoding);
 		}
 	}
 
@@ -184,6 +197,6 @@ public class HuffProcessor {
 			int value = in.readBits(BITS_PER_WORD + 1 );
 			return new HuffNode(value,0,null,null);
 			}
-		}
+	}
 		
 }
